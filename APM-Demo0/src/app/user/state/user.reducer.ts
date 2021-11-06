@@ -5,9 +5,14 @@ export interface UserState {
   maskUserName: boolean;
 }
 
-export const userReducer = createReducer(
-  { maskUserName: false },
-  on(createAction('[User] Mask User Name'), (state) => {
+const initialState: UserState = {
+  currentUser: null,
+  maskUserName: false
+}
+
+export const userReducer = createReducer<UserState>(
+  initialState,
+  on(createAction('[User] Mask User Name'), (state): UserState => {
     return {
       ...state,
       maskUserName: !state.maskUserName,
