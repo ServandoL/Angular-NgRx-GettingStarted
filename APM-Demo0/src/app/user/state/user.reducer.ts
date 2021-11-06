@@ -1,4 +1,9 @@
 import { createAction, createReducer, on } from '@ngrx/store';
+import { User } from '../user';
+export interface UserState {
+  currentUser: User;
+  maskUserName: boolean;
+}
 
 export const userReducer = createReducer(
   { maskUserName: false },
