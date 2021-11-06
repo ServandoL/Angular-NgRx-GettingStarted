@@ -5,10 +5,11 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
 import { AuthService } from './auth.service';
+import { getMaskUserName } from './state/user.reducer';
 
 @Component({
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
   pageTitle = 'Log In';
@@ -17,16 +18,16 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   sub: Subscription;
 
-  constructor(private authService: AuthService, private router: Router, private store: Store<any>) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private store: Store<any>
+  ) {}
 
   ngOnInit(): void {
-    this.sub = this.store.select('users').subscribe(
-      users => {
-        if (users) {
-          this.maskUserName = users.maskUserName;
-        }
-      }
-    );
+    this.sub = this.store.select(getMaskUserName).subscribe((maskUserName) => {
+        this.maskUserName = maskUserName;
+    });
   }
 
   ngOnDestroy(): void {
@@ -39,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   checkChanged(): void {
     this.store.dispatch({
-      type: '[User] Mask User Name'
+      type: '[User] Mask User Name',
     });
   }
 
