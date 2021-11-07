@@ -7,6 +7,7 @@ import {
 import * as AppState from '../../state/app.state';
 import * as ProductActions from './product.actions';
 import { Product } from '../product';
+import { ProductService } from '../product.service';
 // reducers define the state of a store
 
 export interface State extends AppState.State {
@@ -73,5 +74,11 @@ export const productReducer = createReducer<ProductState>(
         starRating: 0,
       },
     };
+  }),
+  on(ProductActions.loadProductsSuccess, (state, action): ProductState => {
+    return {
+      ...state,
+      products: action.products
+    }
   })
 );
