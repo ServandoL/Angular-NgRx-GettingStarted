@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 
 import { AuthService } from './auth.service';
 import { getMaskUserName } from './state/user.reducer';
+import * as UserActions from '../user/state/user.actions';
 
 @Component({
   templateUrl: './login.component.html',
@@ -39,9 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   checkChanged(): void {
-    this.store.dispatch({
-      type: '[User] Mask User Name',
-    });
+    this.store.dispatch(UserActions.maskUserName());
   }
 
   login(loginForm: NgForm): void {
