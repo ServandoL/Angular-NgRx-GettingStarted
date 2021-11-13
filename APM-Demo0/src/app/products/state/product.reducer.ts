@@ -25,14 +25,14 @@ const initialState: ProductState = {
   showProductCode: true,
   currentProductId: null,
   products: [],
-  error: ''
+  error: '',
 };
 
 const getProductFeatureState = createFeatureSelector<ProductState>('products');
 
 export const getError = createSelector(
   getProductFeatureState,
-  state => state.error
+  (state) => state.error
 );
 
 export const getShowProductCode = createSelector(
@@ -46,22 +46,26 @@ export const getCurrentProductId = createSelector(
 );
 
 export const getCurrentProduct = createSelector(
-  getProductFeatureState,   // compose selector from the getProductFeatureState selelctor which provides the product slice of state
-  getCurrentProductId,      // compose selector from the getProductId selector which provides the ID of the currently selected product
+  getProductFeatureState, // compose selector from the getProductFeatureState selelctor which provides the product slice of state
+  getCurrentProductId, // compose selector from the getProductId selector which provides the ID of the currently selected product
   (state, getCurrentProductId) => {
-    if (getCurrentProductId === 0) {  // check for product ID of 0, if there is an ID of 0, then assume a new product with no ID defined and return default values
+    if (getCurrentProductId === 0) {
+      // check for product ID of 0, if there is an ID of 0, then assume a new product with no ID defined and return default values
       return {
         id: 0,
         productName: '',
         productCode: 'New',
         description: '',
-        starRating: 0
+        starRating: 0,
       };
-    } else {  // otherwise, check current ID and find the product in the list and return it, otherwise null
-      return getCurrentProductId ? state.products.find(product => product.id === getCurrentProductId) : null;
+    } else {
+      // otherwise, check current ID and find the product in the list and return it, otherwise null
+      return getCurrentProductId
+        ? state.products.find((product) => product.id === getCurrentProductId)
+        : null;
     }
   }
-)
+);
 
 export const getProducts = createSelector(
   getProductFeatureState,
@@ -91,21 +95,38 @@ export const productReducer = createReducer<ProductState>(
   on(ProductActions.initializeCurrentProduct, (state) => {
     return {
       ...state,
-      currentProductId: 0
+      currentProductId: 0,
     };
   }),
   on(ProductActions.loadProductsSuccess, (state, action): ProductState => {
     return {
       ...state,
       products: action.products,
-      error: ''
-    }
+      error: '',
+    };
   }),
   on(ProductActions.loadProductsFailure, (state, action): ProductState => {
     return {
       ...state,
       products: [],
+      error: action.error,
+    };
+  }),
+  on(ProductActions.updateProductSuccess, (state, action): ProductState => {
+    const updatedProducts = state.products.map((item) =>
+      action.product.id === item.id ? action.product : item
+    );
+    return {
+      ...state,
+      products: updatedProducts,
+      currentProductId: action.product.id,
+      error: '',
+    };
+  }),
+  on(ProductActions.updateProductFailure, (state, action): ProductState => {
+    return {
+      ...state,
       error: action.error
-    }
+    };
   })
 );
