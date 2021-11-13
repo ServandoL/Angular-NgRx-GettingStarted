@@ -3,6 +3,8 @@ import { Product } from '../product';
 
 export const toggleProductCode = createAction('[Product] Toggle Product Code');
 
+// Props function is used to define the structure of the action's data
+
 export const setCurrentProduct = createAction(
   '[Product] Set CurrentProduct',
   props<{ currentProductId: number }>()
@@ -26,4 +28,23 @@ export const loadProductsSuccess = createAction(
 export const loadProductsFailure = createAction(
   '[Product] Load Failure',
   props<{ error: string }>()
+);
+
+// action for the update action itself - it will get dispatched when the user selects to save an updated product
+// this action should kick off the save to the back-end server
+export const updateProduct = createAction(
+  '[Product] Update Product',
+  props<{ product: Product }>()
+);
+
+// action for the successfull completion of the operation - it will dispatch from the reducer if the save from the back-end server was successfull
+export const updateProductSuccess = createAction(
+  '[Product] Update Product Success',
+  props<{ product: Product }>()
+);
+
+// action for an error or failure - it will dispatch from the reducer if the save from the back-end server was not successfull
+export const updateProductFailure = createAction(
+  '[Product] Update Product Fail',
+  props<{ error: string}>()
 );
