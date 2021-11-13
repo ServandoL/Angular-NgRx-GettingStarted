@@ -16,14 +16,14 @@ export interface State extends AppState.State {
 
 export interface ProductState {
   showProductCode: boolean;
-  currentProduct: Product;
+  currentProductId: number | null;
   products: Product[];
   error: string;
 }
 
 const initialState: ProductState = {
   showProductCode: true,
-  currentProduct: null,
+  currentProductId: null,
   products: [],
   error: ''
 };
@@ -40,10 +40,28 @@ export const getShowProductCode = createSelector(
   (state) => state.showProductCode
 );
 
-export const getCurrentProduct = createSelector(
+export const getCurrentProductId = createSelector(
   getProductFeatureState,
-  (state) => state.currentProduct
+  (state) => state.currentProductId
 );
+
+export const getCurrentProduct = createSelector(
+  getProductFeatureState,   // compose selector from the getProductFeatureState selelctor which provides the product slice of state
+  getCurrentProductId,      // compose selector from the getProductId selector which provides the ID of the currently selected product
+  (state, getCurrentProductId) => {
+    if (getCurrentProductId === 0) {  // check for product ID of 0, if there is an ID of 0, then assume a new product with no ID defined and return default values
+      return {
+        id: 0,
+        productName: '',
+        productCode: 'New',
+        description: '',
+        starRating: 0
+      };
+    } else {  // otherwise, check current ID and find the product in the list and return it, otherwise null
+      return getCurrentProductId ? state.products.find(product => product.id === getCurrentProductId) : null;
+    }
+  }
+)
 
 export const getProducts = createSelector(
   getProductFeatureState,
@@ -61,25 +79,19 @@ export const productReducer = createReducer<ProductState>(
   on(ProductActions.setCurrentProduct, (state, action): ProductState => {
     return {
       ...state,
-      currentProduct: action.product,
+      currentProductId: action.currentProductId,
     };
   }),
   on(ProductActions.clearCurrentProduct, (state, action): ProductState => {
     return {
       ...state,
-      currentProduct: null,
+      currentProductId: null,
     };
   }),
   on(ProductActions.initializeCurrentProduct, (state) => {
     return {
       ...state,
-      currentProduct: {
-        id: 0,
-        productName: '',
-        productCode: 'New',
-        description: '',
-        starRating: 0,
-      },
+      currentProductId: 0
     };
   }),
   on(ProductActions.loadProductsSuccess, (state, action): ProductState => {
