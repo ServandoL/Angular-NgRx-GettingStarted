@@ -126,7 +126,21 @@ export const productReducer = createReducer<ProductState>(
   on(ProductActions.updateProductFailure, (state, action): ProductState => {
     return {
       ...state,
-      error: action.error
+      error: action.error,
     };
+  }),
+  on(ProductActions.addNewProductSuccess, (state, action): ProductState => {
+    const newProduct = [...state.products, action.product]
+    return {
+      ...state,
+      products: newProduct,
+      error: ''
+    }
+  }),
+  on(ProductActions.addNewProductFailure, (state, action): ProductState => {
+    return {
+      ...state,
+      error: action.error
+    }
   })
 );
