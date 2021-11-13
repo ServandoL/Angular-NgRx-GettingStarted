@@ -38,7 +38,7 @@ export const getCurrentProduct = createSelector(
   (state) => state.currentProduct
 );
 
-export const getProduct = createSelector(
+export const getProducts = createSelector(
   getProductFeatureState,
   (state) => state.products
 );
