@@ -2,7 +2,12 @@
 import { User } from '../user';
 
 /* NgRx */
-import { createReducer, on, createFeatureSelector, createSelector } from '@ngrx/store';
+import {
+  createReducer,
+  on,
+  createFeatureSelector,
+  createSelector,
+} from '@ngrx/store';
 import * as UserActions from './user.actions';
 
 // State for this feature (User)
@@ -13,7 +18,7 @@ export interface UserState {
 
 const initialState: UserState = {
   maskUserName: true,
-  currentUser: null
+  currentUser: null,
 };
 
 // Selector functions
@@ -21,12 +26,12 @@ const getUserFeatureState = createFeatureSelector<UserState>('users');
 
 export const getMaskUserName = createSelector(
   getUserFeatureState,
-  state => state.maskUserName
+  (state) => state.maskUserName
 );
 
 export const getCurrentUser = createSelector(
   getUserFeatureState,
-  state => state.currentUser
+  (state) => state.currentUser
 );
 
 export const userReducer = createReducer<UserState>(
@@ -34,7 +39,7 @@ export const userReducer = createReducer<UserState>(
   on(UserActions.maskUserName, (state): UserState => {
     return {
       ...state,
-      maskUserName: !state.maskUserName
+      maskUserName: !state.maskUserName,
     };
   })
 );

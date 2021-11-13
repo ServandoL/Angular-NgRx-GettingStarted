@@ -1,4 +1,9 @@
-import { createAction, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
+import {
+  createFeatureSelector,
+  createReducer,
+  createSelector,
+  on,
+} from '@ngrx/store';
 import { User } from '../user';
 import * as UserActions from '../state/user.actions';
 export interface UserState {
@@ -8,20 +13,20 @@ export interface UserState {
 
 const initialState: UserState = {
   currentUser: null,
-  maskUserName: false
-}
+  maskUserName: false,
+};
 
 const getUserFeatureState = createFeatureSelector<UserState>('users');
 
 export const getCurrentUser = createSelector(
   getUserFeatureState,
-  state => state.currentUser
-)
+  (state) => state.currentUser
+);
 
 export const getMaskUserName = createSelector(
   getUserFeatureState,
-  state => state.maskUserName
-)
+  (state) => state.maskUserName
+);
 
 export const userReducer = createReducer<UserState>(
   initialState,

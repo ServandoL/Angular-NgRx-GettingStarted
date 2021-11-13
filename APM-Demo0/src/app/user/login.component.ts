@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { AuthService } from './auth.service';
 import { getMaskUserName } from './state/user.reducer';
@@ -12,12 +12,12 @@ import * as UserActions from '../user/state/user.actions';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
   pageTitle = 'Log In';
 
   maskUserName: boolean;
 
-  sub: Subscription;
+  maskUserName$: Observable<boolean>;
 
   constructor(
     private authService: AuthService,
@@ -26,13 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.sub = this.store.select(getMaskUserName).subscribe((maskUserName) => {
-        this.maskUserName = maskUserName;
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.maskUserName$ = this.store.select(getMaskUserName);
   }
 
   cancel(): void {
