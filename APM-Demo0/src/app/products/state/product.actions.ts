@@ -63,3 +63,18 @@ export const addNewProductFailure = createAction(
   '[Product] Add New Product Failure',
   props<{ error: string }>()
 )
+
+export const deleteProduct = createAction(
+  '[Product] Delete Product',
+  props<{ productId: number }>()
+)
+
+export const deleteProductSuccess = createAction(
+  '[Product] Delete Product Success',
+  props<{ productId: number }>()
+)
+
+export const deleteProductFailure = createAction(
+  '[Product] Delete Product Failure',
+  props<{ error: string }>()
+)
