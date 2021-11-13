@@ -10,7 +10,6 @@ import { NumberValidators } from '../../shared/number.validator';
 import { Store } from '@ngrx/store';
 import { State, getCurrentProduct } from '../state/product.reducer';
 import * as ProductActions from '../state/product.actions';
-import { StoreDevtools } from '@ngrx/store-devtools';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -152,13 +151,9 @@ export class ProductEditComponent implements OnInit {
             error: (err) => (this.errorMessage = err),
           });
         } else {
-          this.productService.updateProduct(product).subscribe({
-            next: (p) =>
-              this.store.dispatch(
-                ProductActions.setCurrentProduct({ currentProductId: p.id })
-              ),
-            error: (err) => (this.errorMessage = err),
-          });
+          // instead of calling the product service directly to save the product,
+          // we'll dispatch the updateProduct acdtion and pass in our updated product
+          this.store.dispatch(ProductActions.updateProduct({ product }));
         }
       }
     }
